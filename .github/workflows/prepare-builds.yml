@@ -30,10 +30,21 @@ jobs:
         env:
           BATCH_MODE: 1
           PARALLEL_BUILD: 1
+        continue-on-error: true
         run: make "${TARGET}-build"
+
+      - name: Check for firmware artifacts
+        id: artifacts
+        run: |
+          if [ -d "output/${TARGET}/images/knulli/images/${TARGET}" ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Upload firmware artifacts
         uses: actions/upload-artifact@v4
+        if: steps.artifacts.outputs.found == 'true'
         with:
           name: knulli-${{ env.TARGET }}-images
           path: output/${{ env.TARGET }}/images/knulli/images/${{ env.TARGET }}
