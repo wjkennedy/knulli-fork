@@ -22,6 +22,32 @@ Knulli CFW is a fork of the open-source and completely free retro-gaming distrib
 
  - :wrench: If you want to help with development, [we accept PRs](https://makeapullrequest.com/) -- anyone is welcome, we embrace the [Bazaar development principles](https://en.wikipedia.org/wiki/The_Cathedral_and_the_Bazaar)
 
+## Build instructions (local Docker + GitHub Actions)
+
+### Local builds with Docker
+1. Build the Knulli build container:
+   ```sh
+   make build-docker-image
+   ```
+2. Build a firmware image for a target (use the suffix from `configs/knulli-*.board`):
+   ```sh
+   make h700-build
+   ```
+   Replace `h700` with another supported target (for example: `rk3566`, `rk3326`, or `sm8250`).
+
+Build artifacts will be created under:
+```
+output/<target>/images/knulli/images/<target>/
+```
+
+### GitHub Actions builds
+1. Open the **Actions** tab and select the **Prepare builds** workflow.
+2. Click **Run workflow** and provide the `target` input (defaults to `h700`).
+3. After the workflow completes, download the uploaded artifact named:
+   ```
+   knulli-<target>-images
+   ```
+
 ## Directory navigation
 
  - `board` Platform-specific build configuration. This is where to include special patches/configuration files needed to have particular components work on a particular platform. It is instead encouraged to apply patches at the location of the package itself, but this may not always be possible.
