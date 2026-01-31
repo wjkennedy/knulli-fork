@@ -8,13 +8,6 @@ on:
         required: true
         default: "h700"
   pull_request:
-    paths:
-      - "Dockerfile"
-      - "Makefile"
-      - "configs/**"
-      - "package/**"
-      - "scripts/**"
-      - ".github/workflows/prepare-builds.yml"
 
 jobs:
   prepare:
