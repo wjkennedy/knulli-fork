@@ -1,0 +1,7 @@
+config BR2_PACKAGE_RTL_SDR
+	bool "rtl-sdr"
+	select BR2_PACKAGE_LIBUSB
+	help
+	  Utilities and libraries for RTL2832U-based software-defined radio.
+
+	  https://osmocom.org/projects/rtl-sdr
