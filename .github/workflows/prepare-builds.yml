@@ -1,0 +1,39 @@
+name: Prepare builds
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Build target (matches knulli-*.board name suffix)"
+        required: true
+        default: "h700"
+  pull_request:
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    env:
+      TARGET: ${{ github.event.inputs.target || 'h700' }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Knulli build container
+        run: make build-docker-image
+
+      - name: Build Knulli firmware image
+        env:
+          BATCH_MODE: 1
+          PARALLEL_BUILD: 1
+        run: make "${TARGET}-build"
+
+      - name: Upload firmware artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: knulli-${{ env.TARGET }}-images
+          path: output/${{ env.TARGET }}/images/knulli/images/${{ env.TARGET }}
